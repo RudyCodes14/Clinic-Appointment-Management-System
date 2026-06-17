@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Clinical Sheet</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <h2>CareFlow Clinic - Caregiver Portal</h2>
+        <a href="/dashboard">Dashboard</a>
+    </nav>
+    <div class="container" style="max-width:650px;">
+        <div class="card">
+            <h3>Add Clinical Charts & Observations</h3>
+            <p>Patient ID Assignment Reference: <strong>#{{ appointment.patient_id }}</strong></p>
+            <form action="/appointment/update/{{ appointment.id }}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Session Management Status</label>
+                    <select name="status">
+                        <option value="Scheduled" {% if appointment.status == 'Scheduled' %}selected{% endif %}>Scheduled</option>
+                        <option value="Completed" {% if appointment.status == 'Completed' %}selected{% endif %}>Completed</option>
+                        <option value="Cancelled" {% if appointment.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Official Diagnosis</label>
+                    <textarea name="diagnosis" rows="4" required>{{ record.diagnosis if record else '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Prescriptions & Treatment Strategy</label>
+                    <textarea name="prescription" rows="4" required>{{ record.prescription if record else '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Upload Diagnostic Scans / Lab PDF Reports (Optional)</label>
+                    <input type="file" name="file">
+                </div>
+                <button type="submit" class="btn">Update & Save Records</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

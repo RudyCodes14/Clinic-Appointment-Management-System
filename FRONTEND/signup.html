@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareFlow Clinic - Registration</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <h2>CareFlow Clinic</h2>
+        <div>
+            <a href="/login">Login</a>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 450px;">
+        <div class="card">
+            <h3 style="text-align: center; margin-bottom: 1.5rem;">Create an Account</h3>
+            
+            {% if error %}
+                <div style="background-color: #fee2e2; color: #991b1b; padding: 0.75rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9rem; font-weight: 500;">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <form action="/signup" method="post">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="john.doe@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Account Type / Portal</label>
+                    <select id="role" name="role" required>
+                        <option value="patient">Patient</option>
+                        <option value="doctor">Doctor / Healthcare Provider</option>
+                        <option value="staff">Clinic Frontdesk Staff</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem; padding: 0.75rem;">Register Account</button>
+            </form>
+
+            <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: #64748b;">
+                Already have an account? <a href="/login" style="color: var(--primary); text-decoration: none; font-weight: 500;">Sign in here</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

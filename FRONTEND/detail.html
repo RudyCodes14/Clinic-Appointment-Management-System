@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Appointment Sheet</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <h2>CareFlow Clinic</h2>
+        <a href="/dashboard">Dashboard</a>
+    </nav>
+    <div class="container" style="max-width:700px;">
+        <div class="card">
+            <h3>Appointment Sheet Summary</h3>
+            <hr style="border:0; border-top:1px solid var(--border); margin-bottom:1rem;">
+            
+            <p><strong>Appointment ID:</strong> #{{ appointment.id }}</p>
+            <p><strong>Assigned Doctor:</strong> Dr. {{ appointment.doctor_name }}</p>
+            <p><strong>Scheduled Time:</strong> {{ appointment.appointment_date }}</p>
+            <p><strong>Status:</strong> <span class="badge badge-{{ appointment.status }}">{{ appointment.status }}</span></p>
+            <p><strong>Reported Symptoms:</strong> {{ appointment.symptoms }}</p>
+            
+            <h4 style="margin-top:2rem;">Clinical Charts & Medical Records</h4>
+            {% if record %}
+                <div style="background:#f1f5f9; padding:1rem; border-radius:4px;">
+                    <p><strong>Diagnosis Summary:</strong><br>{{ record.diagnosis }}</p>
+                    <p><strong>Prescription Metrics:</strong><br>{{ record.prescription }}</p>
+                    {% if record.attachment_path %}
+                        <p><a href="/static/{{ record.attachment_path }}" target="_blank" style="color:var(--primary);">View Attached Lab Report/Scan</a></p>
+                    {% endif %}
+                </div>
+            {% else %}
+                <p style="color:#64748b; font-style: italic;">No clinical assessment records added for this session yet.</p>
+            {% endif %}
+
+            <div style="margin-top:2rem;">
+                {% if appointment.status == 'Scheduled' %}
+                <form action="/appointment/cancel/{{ appointment.id }}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Cancel Appointment</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
