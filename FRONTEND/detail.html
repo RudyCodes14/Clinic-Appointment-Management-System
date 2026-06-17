@@ -1,74 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appointment #{{ appointment.id }} · CareFlow Clinic</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-    <nav>
-        <h2>CareFlow Clinic</h2>
-        <div>
-            <a href="/dashboard" class="btn btn-ghost btn-sm">← Dashboard</a>
+{% extends "base.html" %}
+{% set active_page = 'appointments' %}
+{% block title %}Appointment #{{ appointment.id }} · CareFlow Clinic{% endblock %}
+
+{% block content %}
+<div class="page-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+    <div>
+        <h3>Appointment Sheet Summary</h3>
+        <div class="subtitle">Appointment #{{ appointment.id }}</div>
+    </div>
+    <span class="badge badge-{{ appointment.status }}">{{ appointment.status }}</span>
+</div>
+
+<div class="card" style="max-width:780px;">
+    <div class="detail-grid">
+        <div class="detail-item">
+            <div class="k">Appointment ID</div>
+            <div class="v">#{{ appointment.id }}</div>
         </div>
-    </nav>
-
-    <div class="container" style="max-width:760px;">
-        <div class="page-head">
-            <div>
-                <h3>Appointment Sheet Summary</h3>
-                <div class="subtitle">Appointment #{{ appointment.id }}</div>
-            </div>
-            <span class="badge badge-{{ appointment.status }}">{{ appointment.status }}</span>
+        <div class="detail-item">
+            <div class="k">Assigned Doctor</div>
+            <div class="v">Dr. {{ appointment.doctor_name }}</div>
         </div>
-
-        <div class="card">
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <div class="k">Appointment ID</div>
-                    <div class="v">#{{ appointment.id }}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="k">Assigned Doctor</div>
-                    <div class="v">Dr. {{ appointment.doctor_name }}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="k">Scheduled Time</div>
-                    <div class="v">{{ appointment.appointment_date }}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="k">Status</div>
-                    <div class="v"><span class="badge badge-{{ appointment.status }}">{{ appointment.status }}</span></div>
-                </div>
-            </div>
-
-            <div class="detail-item">
-                <div class="k">Reported Symptoms</div>
-                <div class="v">{{ appointment.symptoms }}</div>
-            </div>
-
-            <h4 class="section-title">Clinical Charts &amp; Medical Records</h4>
-            {% if record %}
-                <div class="record-box">
-                    <p><strong>Diagnosis Summary</strong><br>{{ record.diagnosis }}</p>
-                    <p><strong>Prescription &amp; Treatment</strong><br>{{ record.prescription }}</p>
-                    {% if record.attachment_path %}
-                        <p><a href="/static/{{ record.attachment_path }}" target="_blank" class="btn btn-ghost btn-sm">View Attached Lab Report / Scan</a></p>
-                    {% endif %}
-                </div>
-            {% else %}
-                <p class="muted">No clinical assessment records added for this session yet.</p>
-            {% endif %}
-
-            {% if appointment.status == 'Scheduled' %}
-            <div class="mt-2">
-                <form action="/appointment/cancel/{{ appointment.id }}" method="post" style="display:inline;">
-                    <button type="submit" class="btn btn-danger">Cancel Appointment</button>
-                </form>
-            </div>
-            {% endif %}
+        <div class="detail-item">
+            <div class="k">Scheduled Time</div>
+            <div class="v">{{ appointment.appointment_date }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="k">Status</div>
+            <div class="v"><span class="badge badge-{{ appointment.status }}">{{ appointment.status }}</span></div>
         </div>
     </div>
-</body>
-</html>
+
+    <div class="detail-item">
+        <div class="k">Reported Symptoms</div>
+        <div class="v">{{ appointment.symptoms }}</div>
+    </div>
+
+    <h4 class="section-title">Clinical Charts &amp; Medical Records</h4>
+    {% if record %}
+        <div class="record-box">
+            <p><strong>Diagnosis Summary</strong><br>{{ record.diagnosis }}</p>
+            <p><strong>Prescription &amp; Treatment</strong><br>{{ record.prescription }}</p>
+            {% if record.attachment_path %}
+                <p><a href="/static/{{ record.attachment_path }}" target="_blank" class="btn btn-ghost btn-sm">View Attached Lab Report / Scan</a></p>
+            {% endif %}
+        </div>
+    {% else %}
+        <p class="muted">No clinical assessment records added for this session yet.</p>
+    {% endif %}
+
+    {% if appointment.status == 'Scheduled' %}
+    <div class="mt-2">
+        <form action="/appointment/cancel/{{ appointment.id }}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-danger">Cancel Appointment</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

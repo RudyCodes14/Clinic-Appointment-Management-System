@@ -1,55 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Appointment · CareFlow Clinic</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-    <nav>
-        <h2>CareFlow Clinic</h2>
-        <div>
-            <a href="/dashboard" class="btn btn-ghost btn-sm">← Back to Dashboard</a>
+{% extends "base.html" %}
+{% set active_page = 'book' %}
+{% block title %}Book Appointment · CareFlow Clinic{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <h3>Schedule a Clinical Appointment</h3>
+    <div class="subtitle">Pick a doctor and a time window that works for you.</div>
+</div>
+
+<div class="card" style="max-width:640px;">
+    {% if error %}
+        <div class="error-box">{{ error }}</div>
+    {% endif %}
+
+    <form action="/appointment/book" method="post">
+        <div class="form-group">
+            <label>Choose Doctor</label>
+            <select name="doctor_name" required>
+                <option value="Smith (Cardiology)">Dr. Smith — Cardiology</option>
+                <option value="Davis (Pediatrics)">Dr. Davis — Pediatrics</option>
+                <option value="Jone (General Medicine)">Dr. Jone — General Medicine</option>
+            </select>
         </div>
-    </nav>
 
-    <div class="container" style="max-width:640px;">
-        <div class="page-head">
-            <div>
-                <h3>Schedule a Clinical Appointment</h3>
-                <div class="subtitle">Pick a doctor and a time window that works for you.</div>
-            </div>
+        <div class="form-group">
+            <label>Preferred Date &amp; Appointment Window</label>
+            <input type="datetime-local" name="appointment_date" required>
         </div>
 
-        <div class="card">
-            {% if error %}
-                <div class="error-box">{{ error }}</div>
-            {% endif %}
-
-            <form action="/appointment/book" method="post">
-                <div class="form-group">
-                    <label>Choose Doctor</label>
-                    <select name="doctor_name" required>
-                        <option value="Smith (Cardiology)">Dr. Smith — Cardiology</option>
-                        <option value="Davis (Pediatrics)">Dr. Davis — Pediatrics</option>
-                        <option value="Jone (General Medicine)">Dr. Jone — General Medicine</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Preferred Date &amp; Appointment Window</label>
-                    <input type="datetime-local" name="appointment_date" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Briefly Explain Symptoms</label>
-                    <textarea name="symptoms" rows="4" placeholder="Mention reasons or descriptions..." required></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-block">Confirm Safe Booking</button>
-            </form>
+        <div class="form-group">
+            <label>Briefly Explain Symptoms</label>
+            <textarea name="symptoms" rows="4" placeholder="Mention reasons or descriptions..." required></textarea>
         </div>
-    </div>
-</body>
-</html>
+
+        <button type="submit" class="btn btn-block">Confirm Safe Booking</button>
+    </form>
+</div>
+{% endblock %}

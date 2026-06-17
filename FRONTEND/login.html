@@ -6,42 +6,37 @@
     <title>Sign In · CareFlow Clinic</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
-    <nav>
-        <h2>CareFlow Clinic</h2>
-        <div>
-            <a href="/signup">Sign Up</a>
-        </div>
-    </nav>
+<body class="auth-page">
+    <div class="auth-top">
+        <a href="/signup">Sign Up</a>
+    </div>
 
-    <div class="auth-wrap">
-        <div class="card auth-card">
-            <div class="brand-badge">＋</div>
-            <h3>Welcome back</h3>
-            <p class="tagline">Sign in to your CareFlow account</p>
+    <div class="card auth-card">
+        <div class="brand-badge">＋</div>
+        <h3>Welcome back</h3>
+        <p class="tagline">Sign in to your CareFlow account</p>
 
-            {% if error %}
-                <div class="error-box">{{ error }}</div>
-            {% endif %}
+        {% if error %}
+            <div class="error-box">{{ error }}</div>
+        {% endif %}
 
-            <form action="/login" method="post">
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="patient@example.com" required>
-                </div>
+        <form action="/login" method="post">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="patient@example.com" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="••••••••" required>
-                </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
 
-                <button type="submit" class="btn btn-block">Sign In</button>
-            </form>
+            <button type="submit" class="btn btn-block">Sign In</button>
+        </form>
 
-            <p class="auth-foot">
-                New to the clinic? <a href="/signup">Create an account</a>
-            </p>
-        </div>
+        <p class="auth-foot">
+            New to the clinic? <a href="/signup">Create an account</a>
+        </p>
     </div>
 </body>
 </html>
