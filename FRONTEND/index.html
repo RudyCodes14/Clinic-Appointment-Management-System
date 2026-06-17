@@ -2,60 +2,92 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Clinic Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard · CareFlow Clinic</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <nav>
         <h2>CareFlow Clinic</h2>
         <div>
-            <span>Welcome, <strong>{{ current_user.name }}</strong> ({{ current_user.role }})</span>
+            <span>Welcome, <strong>{{ current_user.name }}</strong> · {{ current_user.role }}</span>
             <a href="/dashboard">Dashboard</a>
-            <a href="/logout" class="btn btn-danger" style="color:white;">Logout</a>
+            <a href="/logout" class="btn btn-danger btn-sm">Logout</a>
         </div>
     </nav>
+
     <div class="container">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-            <h3>Appointment Management Desk</h3>
+        <div class="page-head">
+            <div>
+                <h3>Appointment Management Desk</h3>
+                <div class="subtitle">
+                    {% if current_user.role in ['doctor', 'staff'] %}
+                        Viewing all clinic appointments.
+                    {% else %}
+                        Your scheduled appointments.
+                    {% endif %}
+                </div>
+            </div>
             {% if current_user.role == "patient" %}
             <a href="/appointment/book" class="btn">+ Book New Appointment</a>
             {% endif %}
         </div>
 
+        <div class="stats">
+            <div class="stat is-total">
+                <div class="stat-label">Total</div>
+                <div class="stat-value">{{ appointments | length }}</div>
+            </div>
+            <div class="stat is-scheduled">
+                <div class="stat-label">Scheduled</div>
+                <div class="stat-value">{{ appointments | selectattr('status', 'equalto', 'Scheduled') | list | length }}</div>
+            </div>
+            <div class="stat is-completed">
+                <div class="stat-label">Completed</div>
+                <div class="stat-value">{{ appointments | selectattr('status', 'equalto', 'Completed') | list | length }}</div>
+            </div>
+            <div class="stat is-cancelled">
+                <div class="stat-label">Cancelled</div>
+                <div class="stat-value">{{ appointments | selectattr('status', 'equalto', 'Cancelled') | list | length }}</div>
+            </div>
+        </div>
+
         <div class="card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Patient ID / Name</th>
-                        <th>Doctor Requested</th>
-                        <th>Date & Time</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for appt in appointments %}
-                    <tr>
-                        <td>{{ appt.id }}</td>
-                        <td>User #{{ appt.patient_id }}</td>
-                        <td>Dr. {{ appt.doctor_name }}</td>
-                        <td>{{ appt.appointment_date }}</td>
-                        <td><span class="badge badge-{{ appt.status }}">{{ appt.status }}</span></td>
-                        <td>
-                            <a href="/appointment/{{ appt.id }}" class="btn" style="padding: 3px 8px;">View Details</a>
-                            {% if current_user.role in ['doctor', 'staff'] and appt.status == 'Scheduled' %}
-                                <a href="/appointment/update/{% if appt.id is defined %}{{ appt.id }}{% else %}{{ appt.id }}{% endif %}" class="btn" style="background:#059669;">Update / Treat</a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="6" style="text-align:center;">No scheduled records found.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Patient</th>
+                            <th>Doctor Requested</th>
+                            <th>Date &amp; Time</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appt in appointments %}
+                        <tr>
+                            <td>#{{ appt.id }}</td>
+                            <td>User #{{ appt.patient_id }}</td>
+                            <td>Dr. {{ appt.doctor_name }}</td>
+                            <td>{{ appt.appointment_date }}</td>
+                            <td><span class="badge badge-{{ appt.status }}">{{ appt.status }}</span></td>
+                            <td>
+                                <a href="/appointment/{{ appt.id }}" class="btn btn-ghost btn-sm">View Details</a>
+                                {% if current_user.role in ['doctor', 'staff'] and appt.status == 'Scheduled' %}
+                                    <a href="/appointment/update/{{ appt.id }}" class="btn btn-success btn-sm">Update / Treat</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="table-empty">No scheduled records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </body>

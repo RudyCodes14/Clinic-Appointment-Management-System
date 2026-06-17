@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CareFlow Clinic - Login</title>
+    <title>Sign In · CareFlow Clinic</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
@@ -14,14 +14,14 @@
         </div>
     </nav>
 
-    <div class="container" style="max-width: 450px;">
-        <div class="card">
-            <h3 style="text-align: center; margin-bottom: 1.5rem;">Account Sign In</h3>
-            
+    <div class="auth-wrap">
+        <div class="card auth-card">
+            <div class="brand-badge">＋</div>
+            <h3>Welcome back</h3>
+            <p class="tagline">Sign in to your CareFlow account</p>
+
             {% if error %}
-                <div style="background-color: #fee2e2; color: #991b1b; padding: 0.75rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9rem; font-weight: 500;">
-                    {{ error }}
-                </div>
+                <div class="error-box">{{ error }}</div>
             {% endif %}
 
             <form action="/login" method="post">
@@ -35,11 +35,11 @@
                     <input type="password" id="password" name="password" placeholder="••••••••" required>
                 </div>
 
-                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem; padding: 0.75rem;">Sign In</button>
+                <button type="submit" class="btn btn-block">Sign In</button>
             </form>
 
-            <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: #64748b;">
-                New to the clinic? <a href="/signup" style="color: var(--primary); text-decoration: none; font-weight: 500;">Create an account</a>
+            <p class="auth-foot">
+                New to the clinic? <a href="/signup">Create an account</a>
             </p>
         </div>
     </div>
