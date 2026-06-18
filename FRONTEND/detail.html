@@ -36,7 +36,13 @@
         <div class="v">{{ appointment.symptoms }}</div>
     </div>
 
-    <h4 class="section-title">Clinical Charts &amp; Medical Records</h4>
+    <h4 class="section-title">
+        Clinical Charts &amp; Medical Records
+        <span class="phi-marker" title="Protected health information — visible only to the patient and their care team">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Private · care team only
+        </span>
+    </h4>
     {% if record %}
         <div class="record-box">
             <p><strong>Diagnosis Summary</strong><br>{{ record.diagnosis }}</p>

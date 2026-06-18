@@ -67,6 +67,9 @@
                     <input type="text" placeholder="Search appointments, patients..." aria-label="Search">
                 </div>
                 <div class="topbar-right">
+                    <span class="sys-status" title="All changes saved and synced">
+                        <span class="dot"></span><span class="label-text">All systems synced</span>
+                    </span>
                     <div class="user">
                         <div class="avatar">{{ current_user.name[0] if current_user and current_user.name else "U" }}</div>
                         <div>
