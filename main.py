@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional
 import bcrypt
 import jwt
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi import FastAPI, Request, Form, Depends, HTTPException, File, UploadFile
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -89,6 +90,7 @@ Base.metadata.create_all(bind=engine)
 # FASTAPI SETUP & DEPENDENCIES
 # ==========================================
 app = FastAPI()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/login", auto_error=False)
 app.mount("/static", StaticFiles(directory="Frontend/static"), name="static")
 templates = Jinja2Templates(directory="Frontend")
 
