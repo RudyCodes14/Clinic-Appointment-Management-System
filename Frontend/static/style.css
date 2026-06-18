@@ -1004,3 +1004,184 @@ td .btn { margin: 2px 4px 2px 0; }
         transition-duration: 0.001ms !important;
     }
 }
+
+/* ==========================================================================
+   18. PREMIUM UPGRADE — make the app match the landing surface
+   Same palette; bring the landing's gradient / glass / motion into the
+   logged-in dashboards while keeping operational text on solid surfaces.
+   (Rules here are appended so they win on source order.)
+   ========================================================================== */
+
+/* ---- ambient drifting light behind the content (subtle, behind cards) ---- */
+.content { position: relative; z-index: 0; }
+.content::before, .content::after {
+    content: ""; position: fixed; border-radius: 50%;
+    filter: blur(90px); opacity: 0.55; z-index: -1; pointer-events: none;
+}
+.content::before {
+    width: 460px; height: 460px; top: -120px; right: -100px;
+    background: radial-gradient(circle, rgba(46,107,255,0.20), transparent 70%);
+    animation: blob-drift 24s var(--ease-standard) infinite;
+}
+.content::after {
+    width: 520px; height: 520px; bottom: -160px; left: 6%;
+    background: radial-gradient(circle, rgba(22,182,176,0.18), transparent 70%);
+    animation: blob-drift 28s var(--ease-standard) infinite reverse;
+}
+
+/* ---- Sidebar: gradient active state + lively hovers ---- */
+.nav-item { transition: background var(--dur-3) var(--ease-standard),
+                        color var(--dur-3) var(--ease-standard),
+                        transform var(--dur-2) var(--ease-standard); }
+.nav-item:hover { transform: translateX(3px); }
+.nav-item.active {
+    background: linear-gradient(90deg, var(--primary-50), rgba(46,107,255,0.03));
+}
+.nav-item.active::before {
+    background: linear-gradient(180deg, var(--primary-500), var(--secondary-500));
+    box-shadow: 0 0 12px rgba(46,107,255,0.5);
+}
+.brand .brand-mark { transition: transform var(--dur-4) var(--ease-emphasized); }
+.brand:hover .brand-mark { transform: rotate(90deg) scale(1.06); }
+.logout-btn { transition: all var(--dur-3) var(--ease-standard); }
+.logout-btn:hover { transform: translateY(-1px); }
+.avatar { transition: transform var(--dur-3) var(--ease-standard); }
+.user:hover .avatar { transform: scale(1.06); }
+
+/* ---- Buttons: gradient fills + magnetic lift (matches landing CTAs) ---- */
+.btn {
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+    transition: background var(--dur-3) var(--ease-standard),
+                transform var(--dur-2) var(--ease-standard),
+                box-shadow var(--dur-3) var(--ease-standard),
+                filter var(--dur-3) var(--ease-standard);
+}
+.btn:hover { background: linear-gradient(135deg, var(--primary-600), var(--primary-700)); transform: translateY(-2px); box-shadow: var(--shadow-2); filter: saturate(1.05); }
+.btn:active { transform: translateY(0) scale(0.98); }
+.btn-success { background: linear-gradient(135deg, var(--success-500), var(--success-700)); }
+.btn-success:hover { background: linear-gradient(135deg, var(--success-500), var(--success-700)); filter: brightness(1.05); }
+.btn-danger  { background: linear-gradient(135deg, var(--error-500), var(--error-700)); }
+.btn-danger:hover { background: linear-gradient(135deg, var(--error-500), var(--error-700)); filter: brightness(1.05); }
+.btn-ghost   { background: var(--surface-1); }
+.btn-ghost:hover { background: var(--primary-50); transform: translateY(-2px); }
+
+/* ---- Hero (dashboard welcome): float the orb + interactive chip ---- */
+.hero::after { animation: float-soft 9s var(--ease-standard) infinite; }
+.hero-text .hero-chip { transition: transform var(--dur-3) var(--ease-standard), box-shadow var(--dur-3) var(--ease-standard); }
+.hero-text .hero-chip:hover { transform: translateY(-2px) scale(1.04); box-shadow: var(--shadow-1); }
+.hero-art svg { animation: float-soft 7s var(--ease-standard) infinite; }
+
+/* ---- KPI cards: 3D tilt + colored glow + reactive icon ---- */
+.stat-cards { perspective: 1000px; }
+.stat-card { transition: transform var(--dur-4) var(--ease-standard), box-shadow var(--dur-4) var(--ease-standard); transform-style: preserve-3d; }
+.stat-card::before, .stat-card::after { transition: transform var(--dur-4) var(--ease-emphasized); }
+.stat-card:hover {
+    transform: translateY(-6px) rotateX(6deg) rotateY(-5deg) scale(1.01);
+    box-shadow: var(--shadow-3), 0 22px 44px -24px color-mix(in srgb, var(--accent) 65%, transparent);
+}
+.stat-card:hover::before { transform: translateZ(26px) rotate(-7deg) scale(1.08); }
+.stat-card:hover::after  { transform: translateZ(40px) rotate(7deg); }
+.stat-card:hover .sc-value { color: var(--accent); transition: color var(--dur-3) var(--ease-standard); }
+
+/* ---- Cards: gradient top accent on hover + soft lift ---- */
+.card { position: relative; overflow: hidden;
+    transition: box-shadow var(--dur-4) var(--ease-standard), transform var(--dur-4) var(--ease-standard); }
+.card::after {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--primary-500), var(--secondary-500), var(--accent-green, var(--success-500)));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform var(--dur-5) var(--ease-standard);
+}
+.card:hover { box-shadow: var(--shadow-2); }
+.card:hover::after { transform: scaleX(1); }
+
+/* ---- Table rows: gentle staggered entrance ---- */
+tbody tr { animation: card-rise var(--dur-4) var(--ease-decelerate) both; }
+tbody tr:nth-child(1) { animation-delay: 40ms; }
+tbody tr:nth-child(2) { animation-delay: 80ms; }
+tbody tr:nth-child(3) { animation-delay: 120ms; }
+tbody tr:nth-child(4) { animation-delay: 160ms; }
+tbody tr:nth-child(5) { animation-delay: 200ms; }
+tbody tr:nth-child(6) { animation-delay: 240ms; }
+tbody tr:hover td { background-color: var(--primary-50); }
+
+/* ---- Detail tiles + record: interactive ---- */
+.detail-item { transition: transform var(--dur-3) var(--ease-standard), border-color var(--dur-3) var(--ease-standard), box-shadow var(--dur-3) var(--ease-standard); }
+.detail-item:hover { transform: translateY(-3px); border-color: var(--primary-300); box-shadow: var(--shadow-1); }
+.record-box { transition: box-shadow var(--dur-4) var(--ease-standard); }
+.record-box:hover { box-shadow: var(--shadow-2); }
+
+/* ---- Badges: tiny lift on hover ---- */
+.badge { transition: transform var(--dur-2) var(--ease-standard); }
+.badge:hover { transform: scale(1.06); }
+
+/* ---- Page title: gradient accent to echo the landing ---- */
+.page-head h3 { background: none; }
+
+/* ---- new keyframes ---- */
+@keyframes float-soft { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes blob-drift { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(28px,36px) scale(1.08); } }
+
+/* ==========================================================================
+   19. GLASS CARD VARIANT — frosted glassmorphism (clinical-blue palette)
+   Opt-in via `.card-glass`. Scoped: only elements with this class change.
+   Inspired by the InfiHealth glass dashboard, recoloured to our light palette.
+   ========================================================================== */
+.card-glass {
+    position: relative;
+    overflow: visible;                 /* allow the colour halo to bleed out */
+    background: linear-gradient(135deg, rgba(255,255,255,0.72), rgba(255,255,255,0.40));
+    backdrop-filter: blur(26px) saturate(170%);
+    -webkit-backdrop-filter: blur(26px) saturate(170%);
+    border: 1px solid rgba(255,255,255,0.75);
+    box-shadow: var(--shadow-glass), inset 0 1px 0 rgba(255,255,255,0.7);
+}
+/* drop the hover top-accent bar; glass has its own treatment */
+.card-glass::after { display: none; }
+/* soft coloured glow behind/around the glass (the light it floats on) */
+.card-glass::before {
+    content: "";
+    position: absolute;
+    inset: -46px -36px -56px;
+    z-index: -1;
+    border-radius: 42px;
+    background:
+        radial-gradient(42% 52% at 14% 0%,   rgba(46,107,255,0.45), transparent 70%),
+        radial-gradient(46% 56% at 100% 100%, rgba(22,182,176,0.40), transparent 70%),
+        radial-gradient(40% 42% at 82% 8%,    rgba(143,180,255,0.38), transparent 70%);
+    filter: blur(38px);
+    animation: glass-glow 11s var(--ease-standard) infinite alternate;
+}
+
+/* frosted inputs inside the glass card */
+.card-glass label { color: var(--neutral-800); font-weight: 600; }
+.card-glass input,
+.card-glass select,
+.card-glass textarea {
+    background-color: rgba(255,255,255,0.55);
+    border-color: rgba(255,255,255,0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+}
+.card-glass input::placeholder,
+.card-glass textarea::placeholder { color: var(--neutral-500); }
+.card-glass input:hover,
+.card-glass select:hover,
+.card-glass textarea:hover { border-color: rgba(46,107,255,0.45); }
+.card-glass input:focus,
+.card-glass select:focus,
+.card-glass textarea:focus {
+    background-color: rgba(255,255,255,0.88);
+    border-color: var(--primary-500);
+    box-shadow: var(--ring);
+}
+/* keep the select chevron visible on the frosted fill */
+.card-glass select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%231F54E0' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+}
+
+@keyframes glass-glow {
+    0%   { transform: translate3d(0,0,0) scale(1);    opacity: 0.9; }
+    100% { transform: translate3d(10px,-8px,0) scale(1.06); opacity: 1; }
+}

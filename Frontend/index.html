@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% set active_page = 'dashboard' %}
+{% block title %}Dashboard · CareFlow Clinic{% endblock %}
+
+{% block content %}
+<!-- ===== Welcome Hero Banner ===== -->
+<section class="hero">
+    <div class="hero-text">
+        <h2>Welcome, {{ current_user.name }}!</h2>
+        <p>
+            {% if current_user.role in ['doctor', 'staff'] %}
+                All systems are running smoothly. Here is the clinic's appointment overview.
+            {% else %}
+                All systems are running smoothly. Here is a quick look at your appointments.
+            {% endif %}
+        </p>
+        <span class="hero-chip">🩺 {{ current_user.role | capitalize }} Portal</span>
+    </div>
+
+    <div class="hero-art">
+        <!-- Translucent health figure + glowing orb (matches landing palette) -->
+        <svg viewBox="0 0 440 440" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Translucent figure cradling a glowing health orb">
+            <defs>
+                <linearGradient id="body" x1="120" y1="40" x2="320" y2="430" gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stop-color="#C9DCFF"/>
+                    <stop offset="0.55" stop-color="#86ACFF"/>
+                    <stop offset="1" stop-color="#5C86E8"/>
+                </linearGradient>
+                <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.9"/>
+                    <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+                </linearGradient>
+                <radialGradient id="orb" cx="0.42" cy="0.4" r="0.62">
+                    <stop offset="0" stop-color="#FFE7D6"/>
+                    <stop offset="0.42" stop-color="#FF8A5C"/>
+                    <stop offset="1" stop-color="#F25E3A"/>
+                </radialGradient>
+            </defs>
+            <path d="M220 150 C 292 150 332 206 347 282 C 362 352 350 412 330 432 L 110 432 C 90 412 78 352 93 282 C 108 206 148 150 220 150 Z" fill="url(#body)" opacity="0.82"/>
+            <ellipse cx="220" cy="108" rx="60" ry="66" fill="url(#body)" opacity="0.9"/>
+            <ellipse cx="220" cy="108" rx="60" ry="66" fill="none" stroke="url(#rim)" stroke-width="2.5" opacity="0.7"/>
+            <path d="M150 252 C 128 322 158 362 220 374 C 282 362 312 322 290 252" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="11" fill="none" stroke-linecap="round"/>
+            <circle cx="220" cy="302" r="60" fill="url(#orb)"/>
+            <circle cx="220" cy="302" r="60" fill="none" stroke="#FFFFFF" stroke-opacity="0.5" stroke-width="2"/>
+            <ellipse cx="200" cy="282" rx="19" ry="11" fill="#FFFFFF" opacity="0.4"/>
+            <path d="M186 302 h12 l6 -17 l9 32 l7 -23 l5 8 h14" stroke="#FFFFFF" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.92"/>
+        </svg>
+    </div>
+</section>
+
+<!-- ===== Colorful Stat Cards ===== -->
+<section class="stat-cards">
+    <div class="stat-card sc-blue">
+        <div class="sc-label">Total Appointments</div>
+        <div class="sc-value">{{ appointments | length }}</div>
+        <div class="sc-sub">All records</div>
+    </div>
+    <div class="stat-card sc-purple">
+        <div class="sc-label">Scheduled</div>
+        <div class="sc-value">{{ appointments | selectattr('status', 'equalto', 'Scheduled') | list | length }}</div>
+        <div class="sc-sub">Upcoming visits</div>
+    </div>
+    <div class="stat-card sc-green">
+        <div class="sc-label">Completed</div>
+        <div class="sc-value">{{ appointments | selectattr('status', 'equalto', 'Completed') | list | length }}</div>
+        <div class="sc-sub">Treated sessions</div>
+    </div>
+    <div class="stat-card sc-coral">
+        <div class="sc-label">Cancelled</div>
+        <div class="sc-value">{{ appointments | selectattr('status', 'equalto', 'Cancelled') | list | length }}</div>
+        <div class="sc-sub">Closed records</div>
+    </div>
+</section>
+
+<!-- ===== Appointments Table ===== -->
+<section class="card">
+    <div class="card-head">
+        <h3>Appointment Management Desk</h3>
+        {% if current_user.role == "patient" %}
+        <a href="/appointment/book" class="btn">+ Book New Appointment</a>
+        {% endif %}
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Patient</th>
+                    <th>Doctor Requested</th>
+                    <th>Date &amp; Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appt in appointments %}
+                <tr>
+                    <td>#{{ appt.id }}</td>
+                    <td>User #{{ appt.patient_id }}</td>
+                    <td>Dr. {{ appt.doctor_name }}</td>
+                    <td>{{ appt.appointment_date }}</td>
+                    <td><span class="badge badge-{{ appt.status }}">{{ appt.status }}</span></td>
+                    <td>
+                        <a href="/appointment/{{ appt.id }}" class="btn btn-ghost btn-sm">View Details</a>
+                        {% if current_user.role in ['doctor', 'staff'] and appt.status == 'Scheduled' %}
+                            <a href="/appointment/update/{{ appt.id }}" class="btn btn-success btn-sm">Update / Treat</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="table-empty">No scheduled records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
